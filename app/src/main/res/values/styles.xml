@@ -2,17 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Support library compatibility -->
-        <item name="actionBarStyle">@style/MainThemeActionBar</item>
+
+        <item name="colorPrimary">@color/material_blue_500</item>
+        <item name="colorPrimaryDark">@color/material_blue_700</item>
+        <item name="colorAccent">@color/material_teal_A200</item>
+
     </style>
 
-    <!-- general styles for the action bar -->
-    <style name="MainThemeActionBar">
-
-        <!-- Support library compatibility -->
-        <item name="background">@color/actionbar_background</item>
-        <item name="backgroundStacked">@color/actionbar_background</item>
-        <item name="backgroundSplit">@color/actionbar_background</item>
-    </style>
 
 </resources>

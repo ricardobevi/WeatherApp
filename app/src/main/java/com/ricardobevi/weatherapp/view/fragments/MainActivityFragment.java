@@ -1,4 +1,4 @@
-package com.ricardobevi.wheatherapp.view.fragments;
+package com.ricardobevi.weatherapp.view.fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ricardobevi.wheatherapp.R;
+import com.ricardobevi.weatherapp.R;
 
 /**
  * A placeholder fragment containing a simple view.

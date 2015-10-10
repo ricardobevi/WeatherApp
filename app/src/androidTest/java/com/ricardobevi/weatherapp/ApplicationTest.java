@@ -1,4 +1,4 @@
-package com.ricardobevi.wheatherapp;
+package com.ricardobevi.weatherapp;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

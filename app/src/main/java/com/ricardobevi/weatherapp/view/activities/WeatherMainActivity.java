@@ -1,13 +1,11 @@
 package com.ricardobevi.weatherapp.view.activities;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.ricardobevi.weatherapp.R;
 
-public class MainActivity extends AppCompatActivity {
+public class WeatherMainActivity extends AppCompatActivity {
 
 
 
@@ -15,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_weather_main);
 
     }
 

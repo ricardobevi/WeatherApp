@@ -13,12 +13,12 @@ import com.ricardobevi.weatherapp.helper.HttpHelper;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class WeatherListFragment extends Fragment {
 
     TextView textView;
     HttpHelper httpHelper;
 
-    public MainActivityFragment() {
+    public WeatherListFragment() {
     }
 
     @Override
@@ -40,7 +40,7 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_weather_list, container, false);
     }
 
     @Override

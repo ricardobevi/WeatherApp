@@ -20,7 +20,7 @@ public class City {
     Long population;
 
     public static City createFromJSON(JSONObject jsonObject){
-        City city = null;
+        City city = new City();
 
         try {
 
@@ -40,6 +40,9 @@ public class City {
         }
 
         return city;
+    }
+
+    public City() {
     }
 
     public City(Integer id, String name, Pair<Double, Double> coord, String country, Long population) {

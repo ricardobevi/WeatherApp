@@ -2,4 +2,5 @@
     <string name="app_name">WeatherApp</string>
 
     <string name="infoUrl">http://192.168.0.102/json.json</string>
+    <!--string name="infoUrl">http://api.openweathermap.org/data/2.5/forecast/daily?q=buenos%20aires&amp;mode=json&amp;units=metric&amp;APPID=85367b08941d75d2b7c92bb7a3905f9d</string-->
 </resources>

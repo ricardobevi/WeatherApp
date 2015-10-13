@@ -7,9 +7,6 @@ import com.ricardobevi.weatherapp.R;
 
 public class WeatherMainActivity extends AppCompatActivity {
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

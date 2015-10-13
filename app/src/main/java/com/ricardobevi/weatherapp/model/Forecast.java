@@ -22,7 +22,10 @@ public class Forecast {
 
     public static Forecast createFromJSONString(String jsonString){
 
-        Forecast forecast = null;
+        Forecast forecast = new Forecast();
+        forecast.weatherList = new ArrayList<Weather>();
+
+        Log.d(DEBUG_TAG,"JSONString to parse: " + jsonString);
 
         try {
 

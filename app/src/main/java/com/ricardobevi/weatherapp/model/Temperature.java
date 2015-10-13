@@ -21,7 +21,7 @@ public class Temperature {
 
 
     public static Temperature createFromJSON(JSONObject jsonObject) {
-        Temperature temperature = null;
+        Temperature temperature = new Temperature();
 
         try {
 

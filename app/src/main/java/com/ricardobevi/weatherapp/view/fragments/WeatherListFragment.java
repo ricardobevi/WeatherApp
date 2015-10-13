@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ricardobevi.weatherapp.R;
 import com.ricardobevi.weatherapp.helper.HttpHelper;
+import com.ricardobevi.weatherapp.model.Forecast;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -50,7 +51,10 @@ public class WeatherListFragment extends Fragment {
     }
 
     private void setTextInfo(String text){
+
+        Forecast forecast = Forecast.createFromJSONString(text);
+
         if ( textView != null )
-            textView.setText(text);
+            textView.setText(forecast.getWeatherList().get(0).getWeather().getDescription());
     }
 }

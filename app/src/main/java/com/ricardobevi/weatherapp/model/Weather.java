@@ -25,7 +25,7 @@ public class Weather {
 
 
     public static Weather createFromJSON(JSONObject jsonObject) {
-        Weather weather = null;
+        Weather weather = new Weather();
 
         try {
             Long rawDate = jsonObject.getLong("dt");
@@ -42,7 +42,7 @@ public class Weather {
             weather.weather = WeatherDescription.createFromJSON(weatherJsonObject);
 
             JSONObject temperatureJsonObject = jsonObject.getJSONObject("temp");
-            weather.weather = WeatherDescription.createFromJSON(temperatureJsonObject);
+            weather.temp = Temperature.createFromJSON(temperatureJsonObject);
 
 
         } catch (JSONException e) {

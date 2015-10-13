@@ -20,7 +20,7 @@ public class WeatherDescription {
     String icon;
 
     public static WeatherDescription createFromJSON(JSONObject jsonObject) {
-        WeatherDescription weatherDescription = null;
+        WeatherDescription weatherDescription = new WeatherDescription();
 
         try {
 

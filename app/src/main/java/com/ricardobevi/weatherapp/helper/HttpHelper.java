@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -71,9 +72,7 @@ public class HttpHelper extends AsyncTask<String, Void, String> {
         InputStream is = null;
         String rawString = "";
 
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-        int bufferSize = 500;
+        int bufferSize = 5000;
 
         try {
             URL url = new URL(stringUrl);
@@ -104,17 +103,16 @@ public class HttpHelper extends AsyncTask<String, Void, String> {
     }
 
     private String readIt(InputStream stream, int bufferSize) throws IOException, UnsupportedEncodingException {
-        Reader reader = new InputStreamReader(stream, "UTF-8");
-        String rawString = "";
 
-        char[] buffer = new char[bufferSize];
+        StringBuilder stringBuilder = new StringBuilder();
 
-        while (reader.read(buffer) != -1) {
-            rawString = rawString + new String(buffer);
-            buffer = new char[bufferSize];
+        BufferedReader bReader = new BufferedReader(new InputStreamReader(stream));
+        String line;
+        while ((line = bReader.readLine()) != null) {
+            stringBuilder.append(line);
         }
 
-        return rawString;
+        return stringBuilder.toString();
     }
 
     public void setHttpHelperCallback(HttpHelperCallback httpHelperCallback) {

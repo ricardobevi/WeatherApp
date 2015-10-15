@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by ric on 14/10/15.
  */
-public class ForecastArrayAdapter extends ArrayAdapter<Weather> {
+public class WeatherArrayAdapter extends ArrayAdapter<Weather> {
 
     private final Context context;
     private final List<Weather> weatherList;
@@ -33,7 +33,7 @@ public class ForecastArrayAdapter extends ArrayAdapter<Weather> {
     }
 
 
-    public ForecastArrayAdapter(Context context, int resource, List<Weather> objects) {
+    public WeatherArrayAdapter(Context context, int resource, List<Weather> objects) {
         super(context, resource, objects);
 
         this.context = context;
@@ -92,6 +92,16 @@ public class ForecastArrayAdapter extends ArrayAdapter<Weather> {
             holder.weatherTemperatureMin.setText(
                     minTempString + "°C"
             );
+
+
+            String weatherIconString = "ic_" + weather.getWeather().getIcon().substring(0,2);
+
+            Integer weatherIconResource =
+                    convertView.getResources().getIdentifier(
+                            weatherIconString, "drawable", context.getPackageName());
+
+            holder.weatherImage.setImageResource(weatherIconResource);
+
         }
 
 

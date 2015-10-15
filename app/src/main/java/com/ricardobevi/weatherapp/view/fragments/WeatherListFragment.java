@@ -2,7 +2,6 @@ package com.ricardobevi.weatherapp.view.fragments;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.os.Handler;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,9 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ricardobevi.weatherapp.R;
-import com.ricardobevi.weatherapp.adapter.ForecastArrayAdapter;
+import com.ricardobevi.weatherapp.adapter.WeatherArrayAdapter;
 import com.ricardobevi.weatherapp.helper.HttpHelper;
 import com.ricardobevi.weatherapp.model.Forecast;
 import com.ricardobevi.weatherapp.model.Weather;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     ListView weatherListView;
+    TextView cityData;
     HttpHelper httpHelper;
     SwipeRefreshLayout swipeLayout;
 
@@ -97,10 +98,12 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
         swipeLayout.setColorSchemeResources(R.color.material_teal_A200);
 
         weatherListView.setAdapter(
-                new ForecastArrayAdapter(this.getActivity(), R.layout.weather_list_row, weatherArrayList )
+                new WeatherArrayAdapter(this.getActivity(), R.layout.weather_list_row, weatherArrayList)
         );
 
         weatherListView.setOnItemClickListener(new OnWeatherItemClickListener());
+
+        cityData = (TextView) view.findViewById(R.id.cityData);
     }
 
     @Override
@@ -117,7 +120,9 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
         weatherArrayList.addAll(forecast.getWeatherList());
 
-        ( (ForecastArrayAdapter) weatherListView.getAdapter() ).notifyDataSetChanged();
+        ( (WeatherArrayAdapter) weatherListView.getAdapter() ).notifyDataSetChanged();
+
+        cityData.setText( forecast.getCity().toString() );
 
         if ( swipeLayout.isRefreshing() )
             swipeLayout.setRefreshing(false);

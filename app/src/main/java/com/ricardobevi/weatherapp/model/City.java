@@ -92,4 +92,22 @@ public class City {
     public void setPopulation(Long population) {
         this.population = population;
     }
+
+
+    @Override
+    public String toString() {
+
+        StringBuilder cityString = new StringBuilder();
+
+        cityString
+                .append(name)
+                .append(", ")
+                .append(country)
+                .append("\n lon:")
+                .append(coord.first)
+                .append(" lat:")
+                .append(coord.second);
+
+        return cityString.toString();
+    }
 }

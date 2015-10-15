@@ -51,7 +51,9 @@ public class Forecast {
     }
 
     public Forecast() {
-
+        weatherList = new ArrayList<Weather>();
+        city = new City();
+        cnt = 0;
     }
 
     public ArrayList<Weather> getWeatherList() {
@@ -76,5 +78,12 @@ public class Forecast {
 
     public void setCnt(Integer cnt) {
         this.cnt = cnt;
+    }
+
+
+    public void copy( Forecast forecast_copy ){
+        weatherList = forecast_copy.weatherList;
+        city = forecast_copy.city;
+        cnt = forecast_copy.cnt;
     }
 }

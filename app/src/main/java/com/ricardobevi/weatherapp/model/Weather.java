@@ -29,7 +29,7 @@ public class Weather {
 
         try {
             Long rawDate = jsonObject.getLong("dt");
-            weather.date = new Date(rawDate);
+            weather.date = new Date(rawDate * 1000);
 
             weather.pressure = jsonObject.getDouble("pressure");
             weather.humidity = jsonObject.getInt("humidity");

@@ -27,7 +27,6 @@ public class WeatherMainActivity extends AppCompatActivity {
 
         fragmentTransaction.replace(R.id.main_container, weatherListFragment);
 
-
         fragmentTransaction.addToBackStack(null);
 
         // Commit the transaction

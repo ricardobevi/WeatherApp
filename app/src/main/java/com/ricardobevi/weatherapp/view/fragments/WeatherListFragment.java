@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.ricardobevi.weatherapp.R;
@@ -19,7 +18,6 @@ import com.ricardobevi.weatherapp.helper.HttpHelper;
 import com.ricardobevi.weatherapp.model.Forecast;
 import com.ricardobevi.weatherapp.model.Weather;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -60,8 +58,6 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
     }
 
-
-
     public WeatherListFragment() {
     }
 
@@ -74,7 +70,7 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
         httpHelper.setHttpHelperCallback( new HttpHelper.HttpHelperCallback() {
             @Override
             public void onDataAvailable(String data) {
-                setTextInfo(data);
+                updateForecast(data);
             }
         });
 
@@ -98,14 +94,10 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_weather_list_swipe_refresh);
         swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeResources(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeLayout.setColorSchemeResources(R.color.material_teal_A200);
 
         weatherListView.setAdapter(
-                new ForecastArrayAdapter(this.getActivity(), R.layout.view_weather_list_row, weatherArrayList )
+                new ForecastArrayAdapter(this.getActivity(), R.layout.weather_list_row, weatherArrayList )
         );
 
         weatherListView.setOnItemClickListener(new OnWeatherItemClickListener());
@@ -113,22 +105,22 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeLayout.setRefreshing(false);
-            }
-        }, 5000);
+        httpHelper.refresh();
     }
 
 
-    private void setTextInfo(String text){
+    private void updateForecast(String text){
 
         forecast = Forecast.createFromJSONString(text);
 
         weatherArrayList.clear();
 
         weatherArrayList.addAll(forecast.getWeatherList());
+
+        ( (ForecastArrayAdapter) weatherListView.getAdapter() ).notifyDataSetChanged();
+
+        if ( swipeLayout.isRefreshing() )
+            swipeLayout.setRefreshing(false);
 
     }
 }

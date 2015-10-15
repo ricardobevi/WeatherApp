@@ -18,7 +18,7 @@ import java.net.URL;
 /**
  * Created by ric on 12/10/15.
  */
-public class HttpHelper extends AsyncTask<String, Void, String> {
+public class HttpHelper {
 
     public interface HttpHelperCallback {
         void onDataAvailable(String data);
@@ -30,6 +30,8 @@ public class HttpHelper extends AsyncTask<String, Void, String> {
 
     private String rawStringFromURL = "";
 
+    private String url = "";
+
 
     public HttpHelper(String url, Context context) {
 
@@ -39,87 +41,98 @@ public class HttpHelper extends AsyncTask<String, Void, String> {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            this.execute(url);
+
+            this.url = url;
+
+            this.refresh();
+
         } else {
             Log.e(DEBUG_TAG, "Connection Problem. Unable to fetch URL {" + url + "}");
         }
 
     }
 
-
-    @Override
-    protected String doInBackground(String... urls) {
-
-        // params comes from the execute() call: params[0] is the url.
-        try {
-
-            rawStringFromURL = downloadUrl(urls[0]);
-
-        } catch (IOException e) {
-            Log.e(DEBUG_TAG, "Unable to retrieve web page. URL {" + urls[0] + "} may be invalid.", e);
-        }
-
-        return rawStringFromURL;
+    public void refresh(){
+        HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
+        httpAsyncTask.execute(url);
     }
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        httpHelperCallback.onDataAvailable(rawStringFromURL);
-    }
 
-    private String downloadUrl(String stringUrl) throws IOException {
-        InputStream is = null;
-        String rawString = "";
+    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
 
-        int bufferSize = 5000;
+        @Override
+        protected String doInBackground(String... urls) {
 
-        try {
-            URL url = new URL(stringUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            // Starts the query
-            conn.connect();
-            int response = conn.getResponseCode();
+            // params comes from the execute() call: params[0] is the url.
+            try {
 
-            Log.d(DEBUG_TAG, "The response is: " + response);
-            is = conn.getInputStream();
+                rawStringFromURL = downloadUrl(urls[0]);
 
-            // Convert the InputStream into a string
-            rawString = readIt(is, bufferSize);
-
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
-        } finally {
-            if (is != null) {
-                is.close();
+            } catch (IOException e) {
+                Log.e(DEBUG_TAG, "Unable to retrieve web page. URL {" + urls[0] + "} may be invalid.", e);
             }
+
+            return rawStringFromURL;
         }
 
-        return rawString;
-    }
-
-    private String readIt(InputStream stream, int bufferSize) throws IOException, UnsupportedEncodingException {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        BufferedReader bReader = new BufferedReader(new InputStreamReader(stream));
-        String line;
-        while ((line = bReader.readLine()) != null) {
-            stringBuilder.append(line);
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            httpHelperCallback.onDataAvailable(rawStringFromURL);
         }
 
-        return stringBuilder.toString();
+        private String downloadUrl(String stringUrl) throws IOException {
+            InputStream is = null;
+            String rawString = "";
+
+            int bufferSize = 5000;
+
+            try {
+                URL url = new URL(stringUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                // Starts the query
+                conn.connect();
+                int response = conn.getResponseCode();
+
+                Log.d(DEBUG_TAG, "The response is: " + response);
+                is = conn.getInputStream();
+
+                // Convert the InputStream into a string
+                rawString = readIt(is, bufferSize);
+
+                // Makes sure that the InputStream is closed after the app is
+                // finished using it.
+            } finally {
+                if (is != null) {
+                    is.close();
+                }
+            }
+
+            return rawString;
+        }
+
+        private String readIt(InputStream stream, int bufferSize) throws IOException, UnsupportedEncodingException {
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            BufferedReader bReader = new BufferedReader(new InputStreamReader(stream));
+            String line;
+            while ((line = bReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+
+            return stringBuilder.toString();
+        }
+
     }
 
     public void setHttpHelperCallback(HttpHelperCallback httpHelperCallback) {
         this.httpHelperCallback = httpHelperCallback;
     }
 
-    public void refresh(){
-        this.execute();
-    }
+
 }

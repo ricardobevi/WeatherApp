@@ -6,9 +6,12 @@ import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.ricardobevi.weatherapp.R;
+import com.ricardobevi.weatherapp.model.Forecast;
+import com.ricardobevi.weatherapp.model.Weather;
+import com.ricardobevi.weatherapp.view.fragments.WeatherDetailFragment;
 import com.ricardobevi.weatherapp.view.fragments.WeatherListFragment;
 
-public class WeatherMainActivity extends AppCompatActivity {
+public class WeatherMainActivity extends AppCompatActivity implements WeatherListFragment.OnWeatherItemClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,19 +21,23 @@ public class WeatherMainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onStart();
+        super.onResume();
 
         FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        WeatherListFragment weatherListFragment = new WeatherListFragment();
+        if ( fragmentManager.getBackStackEntryCount() < 1 ) {
 
-        fragmentTransaction.replace(R.id.main_container, weatherListFragment);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.addToBackStack(null);
+            WeatherListFragment weatherListFragment = new WeatherListFragment();
 
-        // Commit the transaction
-        fragmentTransaction.commit();
+            fragmentTransaction.replace(R.id.main_container, weatherListFragment);
+
+            fragmentTransaction.addToBackStack(null);
+
+            fragmentTransaction.commit();
+
+        }
 
     }
 
@@ -44,6 +51,30 @@ public class WeatherMainActivity extends AppCompatActivity {
         else
             super.onBackPressed();
 
+
+    }
+
+    @Override
+    public void onWeatherItemClicked(Weather weather) {
+
+        WeatherDetailFragment weatherDetailFragment = new WeatherDetailFragment();
+
+        Bundle args = new Bundle();
+
+
+        weatherDetailFragment.setArguments();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+        fragmentTransaction.replace(R.id.main_container, weatherDetailFragment);
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+        fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commit();
 
     }
 }

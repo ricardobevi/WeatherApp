@@ -1,5 +1,6 @@
 package com.ricardobevi.weatherapp.view.fragments;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.Fragment;
@@ -34,26 +35,22 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
     ArrayList<Weather> weatherArrayList;
 
+    OnWeatherItemClickListener onWeatherItemClickListener;
 
-    public class OnWeatherItemClickListener implements AdapterView.OnItemClickListener{
+
+    public interface OnWeatherItemClickListener {
+        void onWeatherItemClicked(Weather weather);
+    }
+
+
+    public class OnItemClickListener implements AdapterView.OnItemClickListener{
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            weatherListView.getSelectedItem();
 
-            FragmentManager fragmentManager = getActivity().getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Weather selectedItem = (Weather) weatherListView.getSelectedItem();
 
-            WeatherDetailFragment weatherDetailFragment = new WeatherDetailFragment();
-
-            fragmentTransaction.replace(R.id.main_container, weatherDetailFragment);
-
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-            fragmentTransaction.addToBackStack(null);
-
-            // Commit the transaction
-            fragmentTransaction.commit();
+            onWeatherItemClickListener.onWeatherItemClicked(selectedItem);
 
         }
 
@@ -81,6 +78,19 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            onWeatherItemClickListener = (OnWeatherItemClickListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnWeatherItemClickListener");
+        }
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -101,7 +111,7 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
                 new WeatherArrayAdapter(this.getActivity(), R.layout.weather_list_row, weatherArrayList)
         );
 
-        weatherListView.setOnItemClickListener(new OnWeatherItemClickListener());
+        weatherListView.setOnItemClickListener(new OnItemClickListener());
 
         cityData = (TextView) view.findViewById(R.id.cityData);
     }
@@ -120,11 +130,13 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
         weatherArrayList.addAll(forecast.getWeatherList());
 
-        ( (WeatherArrayAdapter) weatherListView.getAdapter() ).notifyDataSetChanged();
+        if ( weatherListView != null )
+            ((WeatherArrayAdapter) weatherListView.getAdapter()).notifyDataSetChanged();
 
-        cityData.setText( forecast.getCity().toString() );
+        if ( cityData != null )
+            cityData.setText(forecast.getCity().toString());
 
-        if ( swipeLayout.isRefreshing() )
+        if ( swipeLayout != null && swipeLayout.isRefreshing() )
             swipeLayout.setRefreshing(false);
 
     }

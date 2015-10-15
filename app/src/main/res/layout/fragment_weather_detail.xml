@@ -1,13 +1,177 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/fragment_weather_detail"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_margin="10dp"
+
+        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:orientation="horizontal">
 
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/detail_main"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Clear"
+                android:textSize="35sp"
+                android:textColor="@color/primary_material_dark"/>
+
+            <TextView
+                android:id="@+id/detail_desc"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="The sky is clear"
+                android:textSize="14sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                >
+
+                <ImageView
+                    android:id="@+id/detail_icon"
+
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/ic_01" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    >
+
+                    <TextView
+                        android:id="@+id/detail_avg_temp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+
+                        android:text="14"
+                        android:textSize="50sp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+
+
+                        android:text="°C"
+                        android:textSize="12sp"
+                        android:layout_gravity="top"
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/detail_max_temp"
+
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="10dp"
+
+                android:text="max: 20°C"/>
+
+            <TextView
+                android:id="@+id/detail_min_temp"
+
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+
+                android:text="min: 9°C"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/detail_weekday"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+
+                android:textSize="30sp"
+                android:text="Miércoles"
+                android:gravity="right"/>
+
+            <TextView
+                android:id="@+id/detail_date"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+
+                android:textSize="14sp"
+                android:text="14/10/2015"
+                android:gravity="right"/>
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:gravity="end|bottom"
+            >
+
+            <TextView
+                android:id="@+id/humidity"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="end"
+                android:text="Humidity: 97%"/>
+
+            <TextView
+                android:id="@+id/speed"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="end"
+                android:text="Wind: 20km/h"/>
+
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>
 

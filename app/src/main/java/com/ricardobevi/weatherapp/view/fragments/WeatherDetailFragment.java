@@ -50,6 +50,7 @@ public class WeatherDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Override
@@ -62,6 +63,11 @@ public class WeatherDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if ( savedInstanceState != null )
+            weather = savedInstanceState.getParcelable("weather");
+        else
+            weather = getArguments().getParcelable("weather");
 
         detailMain = (TextView) view.findViewById(R.id.detail_main);
         detailDesc = (TextView) view.findViewById(R.id.detail_desc);
@@ -105,6 +111,7 @@ public class WeatherDetailFragment extends Fragment {
         detailIcon.setImageResource(weatherIconResource);
 
 
+
         detailMain.setText( weather.getWeather().getMain() );
         detailDesc.setText( weather.getWeather().getDescription() );
         detailAvgTemp.setText( avgTempString );
@@ -117,9 +124,6 @@ public class WeatherDetailFragment extends Fragment {
 
     }
 
-    public void setWeather(Weather weather) {
-        this.weather = weather;
-    }
 
 
 }

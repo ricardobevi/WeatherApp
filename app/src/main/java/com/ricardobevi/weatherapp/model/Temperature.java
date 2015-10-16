@@ -1,5 +1,7 @@
 package com.ricardobevi.weatherapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -8,7 +10,7 @@ import org.json.JSONObject;
 /**
  * Created by ric on 12/10/15.
  */
-public class Temperature {
+public class Temperature implements Parcelable {
 
     private static final String DEBUG_TAG = "Temperature";
 
@@ -19,6 +21,10 @@ public class Temperature {
     Double eve;
     Double night;
 
+
+    public Temperature(){
+
+    }
 
     public static Temperature createFromJSON(JSONObject jsonObject) {
         Temperature temperature = new Temperature();
@@ -88,4 +94,49 @@ public class Temperature {
     public void setNight(Double night) {
         this.night = night;
     }
+
+
+
+    protected Temperature(Parcel in) {
+        readFromParcel(in);
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeDouble(day);
+        out.writeDouble(min);
+        out.writeDouble(max);
+        out.writeDouble(morn);
+        out.writeDouble(eve);
+        out.writeDouble(night);
+    }
+
+    public void readFromParcel(Parcel in) {
+        day = in.readDouble();
+        min = in.readDouble();
+        max = in.readDouble();
+        morn = in.readDouble();
+        eve = in.readDouble();
+        night = in.readDouble();
+    }
+
+    public static final Creator<Temperature> CREATOR = new Creator<Temperature>() {
+        @Override
+        public Temperature createFromParcel(Parcel in) {
+            return new Temperature(in);
+        }
+
+        @Override
+        public Temperature[] newArray(int size) {
+            return new Temperature[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
 }

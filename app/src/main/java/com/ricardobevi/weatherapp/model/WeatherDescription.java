@@ -1,5 +1,7 @@
 package com.ricardobevi.weatherapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -10,7 +12,7 @@ import java.util.Date;
 /**
  * Created by ric on 12/10/15.
  */
-public class WeatherDescription {
+public class WeatherDescription implements Parcelable {
 
     private static final String DEBUG_TAG = "WeatherDescription";
 
@@ -18,6 +20,11 @@ public class WeatherDescription {
     String main;
     String description;
     String icon;
+
+    public WeatherDescription(){
+
+    }
+
 
     public static WeatherDescription createFromJSON(JSONObject jsonObject) {
         WeatherDescription weatherDescription = new WeatherDescription();
@@ -69,4 +76,42 @@ public class WeatherDescription {
     public void setIcon(String icon) {
         this.icon = icon;
     }
+
+
+    protected WeatherDescription(Parcel in) {
+        readFromParcel(in);
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(id);
+        out.writeString(main);
+        out.writeString(description);
+        out.writeString(icon);
+    }
+
+    public void readFromParcel(Parcel in) {
+        id = in.readInt();
+        main = in.readString();
+        description = in.readString();
+        icon = in.readString();
+    }
+
+    public static final Creator<WeatherDescription> CREATOR = new Creator<WeatherDescription>() {
+        @Override
+        public WeatherDescription createFromParcel(Parcel in) {
+            return new WeatherDescription(in);
+        }
+
+        @Override
+        public WeatherDescription[] newArray(int size) {
+            return new WeatherDescription[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
 }

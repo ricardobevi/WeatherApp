@@ -60,13 +60,13 @@ public class WeatherMainActivity extends AppCompatActivity implements WeatherLis
         WeatherDetailFragment weatherDetailFragment = new WeatherDetailFragment();
 
         Bundle args = new Bundle();
+        args.putParcelable("weather", weather);
 
 
-        weatherDetailFragment.setArguments();
+        weatherDetailFragment.setArguments(args);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
 
         fragmentTransaction.replace(R.id.main_container, weatherDetailFragment);
 

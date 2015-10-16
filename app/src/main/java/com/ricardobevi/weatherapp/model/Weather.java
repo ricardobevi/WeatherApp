@@ -1,5 +1,7 @@
 package com.ricardobevi.weatherapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -10,7 +12,7 @@ import java.util.Date;
 /**
  * Created by ric on 12/10/15.
  */
-public class Weather {
+public class Weather  implements Parcelable {
 
     private static final String DEBUG_TAG = "Weather";
 
@@ -52,6 +54,9 @@ public class Weather {
         return weather;
     }
 
+    public Weather() {
+
+    }
 
     public Date getDate() {
         return date;
@@ -116,4 +121,59 @@ public class Weather {
     public void setClouds(Integer clouds) {
         this.clouds = clouds;
     }
+
+
+    /*
+     * Parcelable Logic
+     */
+
+
+    protected Weather(Parcel in) {
+        this.readFromParcel(in);
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeSerializable(date);
+        out.writeDouble(pressure);
+        out.writeInt(humidity);
+        out.writeDouble(speed);
+        out.writeInt(deg);
+        out.writeInt(clouds);
+
+        out.writeParcelable(temp, flags);
+        out.writeParcelable(weather, flags);
+    }
+
+    private void readFromParcel(Parcel in) {
+        date = (Date) in.readSerializable();
+        pressure = in.readDouble();
+        humidity = in.readInt();
+        speed = in.readDouble();
+        deg = in.readInt();
+        clouds = in.readInt();
+
+        temp = in.readParcelable( Temperature.class.getClassLoader() );
+        weather = in.readParcelable( WeatherDescription.class.getClassLoader() );
+    }
+
+    public static final Creator<Weather> CREATOR = new Creator<Weather>() {
+        @Override
+        public Weather createFromParcel(Parcel in) {
+            return new Weather(in);
+        }
+
+        @Override
+        public Weather[] newArray(int size) {
+            return new Weather[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+
 }

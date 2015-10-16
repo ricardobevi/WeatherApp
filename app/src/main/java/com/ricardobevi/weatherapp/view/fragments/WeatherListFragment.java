@@ -48,7 +48,7 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            Weather selectedItem = (Weather) weatherListView.getSelectedItem();
+            Weather selectedItem = weatherArrayList.get(position);
 
             onWeatherItemClickListener.onWeatherItemClicked(selectedItem);
 
@@ -65,7 +65,7 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
         httpHelper = new HttpHelper( getString(R.string.infoUrl), getActivity().getApplicationContext());
 
-        httpHelper.setHttpHelperCallback( new HttpHelper.HttpHelperCallback() {
+        httpHelper.setHttpHelperCallback(new HttpHelper.HttpHelperCallback() {
             @Override
             public void onDataAvailable(String data) {
                 updateForecast(data);
@@ -107,6 +107,8 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.material_teal_A200);
 
+        swipeLayout.setRefreshing(true);
+
         weatherListView.setAdapter(
                 new WeatherArrayAdapter(this.getActivity(), R.layout.weather_list_row, weatherArrayList)
         );
@@ -114,6 +116,8 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
         weatherListView.setOnItemClickListener(new OnItemClickListener());
 
         cityData = (TextView) view.findViewById(R.id.cityData);
+
+
     }
 
     @Override
@@ -124,20 +128,26 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
     private void updateForecast(String text){
 
-        forecast = Forecast.createFromJSONString(text);
+        if ( text != "" ) {
 
-        weatherArrayList.clear();
+            forecast = Forecast.createFromJSONString(text);
 
-        weatherArrayList.addAll(forecast.getWeatherList());
+            weatherArrayList.clear();
 
-        if ( weatherListView != null )
-            ((WeatherArrayAdapter) weatherListView.getAdapter()).notifyDataSetChanged();
+            weatherArrayList.addAll(forecast.getWeatherList());
 
-        if ( cityData != null )
-            cityData.setText(forecast.getCity().toString());
+            if (weatherListView != null)
+                ((WeatherArrayAdapter) weatherListView.getAdapter()).notifyDataSetChanged();
 
-        if ( swipeLayout != null && swipeLayout.isRefreshing() )
-            swipeLayout.setRefreshing(false);
+            if (cityData != null)
+                cityData.setText(forecast.getCity().toString());
+
+            if (swipeLayout != null && swipeLayout.isRefreshing())
+                swipeLayout.setRefreshing(false);
+
+        } else {
+            cityData.setText(getActivity().getString(R.string.err_no_connection));
+        }
 
     }
 }

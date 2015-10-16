@@ -1,5 +1,7 @@
 package com.ricardobevi.weatherapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -19,6 +21,7 @@ public class Forecast {
     ArrayList<Weather> weatherList;
     City city;
     Integer cnt;
+
 
     public static Forecast createFromJSONString(String jsonString){
 
@@ -56,6 +59,10 @@ public class Forecast {
         cnt = 0;
     }
 
+
+
+
+
     public ArrayList<Weather> getWeatherList() {
         return weatherList;
     }
@@ -86,4 +93,6 @@ public class Forecast {
         city = forecast_copy.city;
         cnt = forecast_copy.cnt;
     }
+
+
 }

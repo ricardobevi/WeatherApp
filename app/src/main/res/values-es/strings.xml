@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AppClima</string>
+
+    <string name="err_no_connection">Ups&amp;#8230no pudimos acceder al servidor.</string>
+
+    <string name="detail_humidity">Humedad: {humidity} %</string>
+    <string name="detail_speed">Viento: {speed}{speed_unit}</string>
+
+</resources>

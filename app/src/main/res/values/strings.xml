@@ -1,15 +1,18 @@
 <resources>
     <string name="app_name">WeatherApp</string>
 
-    <string name="infoUrl">http://192.168.0.102/json.json</string>
-    <!--string name="infoUrl">http://api.openweathermap.org/data/2.5/forecast/daily?q=buenos%20aires&amp;mode=json&amp;units=metric&amp;APPID=85367b08941d75d2b7c92bb7a3905f9d</string-->
-
-    <string name="err_no_connection">Lo sentimos, no pudimos comunicar con el servidor.</string>
+    <string name="err_no_connection">Ups&amp;#8230we couldn\'t access the server.</string>
 
     <string name="temp_unit">C</string>
     <string name="speed_unit">km/h</string>
 
-    <string name="detail_humidity">Humidity: </string>
-    <string name="detail_speed">Speed: </string>
+    <string name="date_format">d/MM/yyyy</string>
+
+    <string name="list_temp">{temp}°{temp_unit}</string>
+
+    <string name="detail_temp_max">Max: {max_temp}°{temp_unit}</string>
+    <string name="detail_temp_min">Min: {min_temp}°{temp_unit}</string>
+    <string name="detail_humidity">Humidity: {humidity} %</string>
+    <string name="detail_speed">Speed: {speed}{speed_unit}</string>
 
 </resources>

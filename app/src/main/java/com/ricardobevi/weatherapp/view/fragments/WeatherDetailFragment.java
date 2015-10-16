@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ricardobevi.weatherapp.R;
+import com.ricardobevi.weatherapp.helper.TagFormat;
 import com.ricardobevi.weatherapp.model.Weather;
 
 import java.text.DecimalFormat;
@@ -80,6 +81,13 @@ public class WeatherDetailFragment extends Fragment {
         humidity = (TextView) view.findViewById(R.id.humidity);
         speed = (TextView) view.findViewById(R.id.speed);
 
+        if ( weather != null )
+            populateView(view);
+
+    }
+
+    private void populateView(View view) {
+
         Double avgTemp = (weather.getTemp().getMax() + weather.getTemp().getMin()) / 2.0;
 
         String humidityString = view.getResources().getString(R.string.detail_humidity);
@@ -88,9 +96,8 @@ public class WeatherDetailFragment extends Fragment {
         String speedUnitString = view.getResources().getString(R.string.speed_unit);
 
 
-
         SimpleDateFormat sdfWeekday = new SimpleDateFormat( "EEEE" );
-        SimpleDateFormat sdfDate = new SimpleDateFormat( "d/MM/yyyy" );
+        SimpleDateFormat sdfDate = new SimpleDateFormat( context.getString(R.string.date_format) );
 
         Double maxTemp = Math.round( weather.getTemp().getMax() ) * 1.0;
         Double minTemp = Math.round( weather.getTemp().getMin() ) * 1.0;
@@ -110,20 +117,35 @@ public class WeatherDetailFragment extends Fragment {
 
         detailIcon.setImageResource(weatherIconResource);
 
+        String detailMaxTempString = TagFormat.from(context.getString(R.string.detail_temp_max))
+                .with("max_temp", maxTempString)
+                .with("temp_unit", tempUnitString)
+                .format();
 
+        String detailMinTempString = TagFormat.from(context.getString(R.string.detail_temp_min))
+                .with("min_temp", minTempString)
+                .with("temp_unit", tempUnitString)
+                .format();
+
+        humidityString = TagFormat.from(humidityString)
+                .with("humidity", weather.getHumidity())
+                .format();
+
+        speedString = TagFormat.from(speedString)
+                .with("speed", weather.getSpeed())
+                .with("speed_unit", speedUnitString)
+                .format();
 
         detailMain.setText( weather.getWeather().getMain() );
         detailDesc.setText( weather.getWeather().getDescription() );
         detailAvgTemp.setText( avgTempString );
-        detailMaxTemp.setText( "Max: " + maxTempString + "°" + tempUnitString );
-        detailMinTemp.setText( "Min: " + minTempString + "°" + tempUnitString );
+        detailMaxTemp.setText( detailMaxTempString );
+        detailMinTemp.setText( detailMinTempString );
         detailWeekday.setText( sdfWeekday.format(weather.getDate()) );
         detailDate.setText( sdfDate.format(weather.getDate()) );
-        humidity.setText( humidityString + weather.getHumidity() );
-        speed.setText( speedString + weather.getSpeed() + speedUnitString );
-
+        humidity.setText( humidityString );
+        speed.setText( speedString );
     }
-
 
 
 }

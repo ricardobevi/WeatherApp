@@ -6,6 +6,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ricardobevi.weatherapp.R;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +28,9 @@ public class HttpHelper {
 
     private static final String DEBUG_TAG = "HttpHelper";
 
+    Integer readTimeout;
+    Integer connectTimeout;
+
     private HttpHelperCallback httpHelperCallback;
 
     private String rawStringFromURL = "";
@@ -42,6 +47,9 @@ public class HttpHelper {
 
         if (networkInfo != null && networkInfo.isConnected()) {
 
+            this.readTimeout = context.getResources().getInteger(R.integer.read_timeout_ms);
+            this.connectTimeout = context.getResources().getInteger(R.integer.connect_timeout_ms);
+
             this.url = url;
 
             this.refresh();
@@ -53,6 +61,7 @@ public class HttpHelper {
     }
 
     public void refresh(){
+        rawStringFromURL = "";
         HttpAsyncTask httpAsyncTask = new HttpAsyncTask();
         httpAsyncTask.execute(url);
     }
@@ -85,13 +94,11 @@ public class HttpHelper {
             InputStream is = null;
             String rawString = "";
 
-            int bufferSize = 5000;
-
             try {
                 URL url = new URL(stringUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(readTimeout);
+                conn.setConnectTimeout(connectTimeout);
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
                 // Starts the query
@@ -102,7 +109,7 @@ public class HttpHelper {
                 is = conn.getInputStream();
 
                 // Convert the InputStream into a string
-                rawString = readIt(is, bufferSize);
+                rawString = readIt(is);
 
                 // Makes sure that the InputStream is closed after the app is
                 // finished using it.
@@ -115,7 +122,7 @@ public class HttpHelper {
             return rawString;
         }
 
-        private String readIt(InputStream stream, int bufferSize) throws IOException, UnsupportedEncodingException {
+        private String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
 
             StringBuilder stringBuilder = new StringBuilder();
 

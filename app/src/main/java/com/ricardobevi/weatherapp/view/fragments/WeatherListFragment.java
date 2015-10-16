@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ricardobevi.weatherapp.R;
 import com.ricardobevi.weatherapp.adapter.WeatherArrayAdapter;
@@ -21,9 +23,7 @@ import com.ricardobevi.weatherapp.model.Weather;
 
 import java.util.ArrayList;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+
 public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     ListView weatherListView;
@@ -72,9 +72,15 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
             }
         });
 
-        forecast = new Forecast();
+        forecast = null;
         weatherArrayList = new ArrayList<Weather>();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        layoutRefresh();
     }
 
     @Override
@@ -107,7 +113,6 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.material_teal_A200);
 
-        swipeLayout.setRefreshing(true);
 
         weatherListView.setAdapter(
                 new WeatherArrayAdapter(this.getActivity(), R.layout.weather_list_row, weatherArrayList)
@@ -122,7 +127,29 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
+        refresh();
+    }
+
+    private void refresh(){
         httpHelper.refresh();
+    }
+
+    private void layoutRefresh(){
+
+        if ( forecast != null ){
+
+            weatherArrayList.clear();
+            weatherArrayList.addAll(forecast.getWeatherList());
+
+            if (cityData != null)
+                cityData.setText(forecast.getCity().toString());
+
+        }
+
+        if (weatherListView != null)
+            ((WeatherArrayAdapter) weatherListView.getAdapter()).notifyDataSetChanged();
+
+
     }
 
 
@@ -132,22 +159,22 @@ public class WeatherListFragment extends Fragment implements SwipeRefreshLayout.
 
             forecast = Forecast.createFromJSONString(text);
 
-            weatherArrayList.clear();
-
-            weatherArrayList.addAll(forecast.getWeatherList());
-
-            if (weatherListView != null)
-                ((WeatherArrayAdapter) weatherListView.getAdapter()).notifyDataSetChanged();
-
-            if (cityData != null)
-                cityData.setText(forecast.getCity().toString());
-
-            if (swipeLayout != null && swipeLayout.isRefreshing())
-                swipeLayout.setRefreshing(false);
+            layoutRefresh();
 
         } else {
-            cityData.setText(getActivity().getString(R.string.err_no_connection));
+            Context context = getActivity().getApplicationContext();
+            CharSequence err = context.getString(R.string.err_no_connection);
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, err, duration);
+            toast.show();
+
+            if ( forecast == null )
+                cityData.setText(context.getString(R.string.err_no_connection));
         }
+
+        if (swipeLayout != null && swipeLayout.isRefreshing())
+            swipeLayout.setRefreshing(false);
 
     }
 }

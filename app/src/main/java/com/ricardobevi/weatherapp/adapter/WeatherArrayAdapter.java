@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ricardobevi.weatherapp.R;
+import com.ricardobevi.weatherapp.helper.TagFormat;
 import com.ricardobevi.weatherapp.model.Forecast;
 import com.ricardobevi.weatherapp.model.Weather;
 
@@ -72,39 +73,53 @@ public class WeatherArrayAdapter extends ArrayAdapter<Weather> {
         if ( weatherList.size() > position ) {
             Weather weather = weatherList.get(position);
 
-            SimpleDateFormat sdfWeekday = new SimpleDateFormat( "EEEE" );
-            SimpleDateFormat sdfDate = new SimpleDateFormat( "d/MM/yyyy" );
-
-            holder.weatherWeekday.setText( sdfWeekday.format(weather.getDate()) );
-            holder.weatherDate.setText( sdfDate.format(weather.getDate()) );
-
-            Double maxTemp = Math.round( weather.getTemp().getMax() ) * 1.0;
-            Double minTemp = Math.round( weather.getTemp().getMin() ) * 1.0;
-
-            DecimalFormat df = new DecimalFormat("0");
-            String maxTempString = df.format(maxTemp);
-            String minTempString = df.format(minTemp);
-
-            holder.weatherTemperatureMax.setText(
-                    maxTempString + "°C"
-            );
-
-            holder.weatherTemperatureMin.setText(
-                    minTempString + "°C"
-            );
-
-
-            String weatherIconString = "ic_" + weather.getWeather().getIcon().substring(0,2);
-
-            Integer weatherIconResource =
-                    convertView.getResources().getIdentifier(
-                            weatherIconString, "drawable", context.getPackageName());
-
-            holder.weatherImage.setImageResource(weatherIconResource);
+            populateView(weather, convertView, holder);
 
         }
 
 
         return convertView;
+    }
+
+
+    private void populateView(Weather weather, View convertView, ViewHolder holder) {
+
+        String tempUnit = context.getString(R.string.temp_unit);
+
+        SimpleDateFormat sdfWeekday = new SimpleDateFormat( "EEEE" );
+        SimpleDateFormat sdfDate = new SimpleDateFormat( context.getString(R.string.date_format) );
+
+        holder.weatherWeekday.setText( sdfWeekday.format(weather.getDate()) );
+        holder.weatherDate.setText( sdfDate.format(weather.getDate()) );
+
+        Double maxTemp = Math.round( weather.getTemp().getMax() ) * 1.0;
+        Double minTemp = Math.round( weather.getTemp().getMin() ) * 1.0;
+
+        DecimalFormat df = new DecimalFormat("0");
+        String maxTempString = df.format(maxTemp);
+        String minTempString = df.format(minTemp);
+
+        maxTempString = TagFormat.from(context.getString(R.string.list_temp))
+                .with("temp", maxTempString)
+                .with("temp_unit", tempUnit)
+                .format();
+
+        minTempString = TagFormat.from(context.getString(R.string.list_temp))
+                .with("temp", minTempString)
+                .with("temp_unit", tempUnit)
+                .format();
+
+        holder.weatherTemperatureMax.setText( maxTempString );
+
+        holder.weatherTemperatureMin.setText( minTempString );
+
+
+        String weatherIconString = "ic_" + weather.getWeather().getIcon().substring(0,2);
+
+        Integer weatherIconResource =
+                convertView.getResources().getIdentifier(
+                        weatherIconString, "drawable", context.getPackageName());
+
+        holder.weatherImage.setImageResource(weatherIconResource);
     }
 }
